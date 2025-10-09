@@ -16,10 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('country');
+            $table->string('country')->default("السعوديه ");
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('avatar_url');
+            $table->string('avatar_url')->default("/no-image.jpeg");
+            $table->string('role')->default('user'); // or nullable
             $table->rememberToken();
             $table->timestamps();
         });

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoremoduleRequest;
 use App\Http\Requests\UpdatemoduleRequest;
+use App\Models\Brands;
 use App\Models\module;
+use App\Models\ModuleDate;
+use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
@@ -14,6 +17,8 @@ class ModuleController extends Controller
     public function index()
     {
         //
+
+        return module::with("moduleDate")->orderBy('created_at', 'desc')->get();
     }
 
     /**
@@ -27,9 +32,20 @@ class ModuleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoremoduleRequest $request)
+    public function store(Request $request)
     {
-        //
+       $module = module::create([
+            "ar_name" => $request->ar_name,
+            "en_name" => $request->en_name,
+            "make_by" => $request->brand_id
+        ]);
+        ModuleDate::create([
+            "module_by" => $module->id,
+            "date_form" => $request->date_from,
+            "date_to" => $request->date_to
+        ]);
+
+        return response()->json(['message' => 'module created successfully'], 201);
     }
 
     /**
@@ -51,16 +67,35 @@ class ModuleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatemoduleRequest $request, module $module)
-    {
-        //
-    }
+    public function update(Request $request, $id)
+{
+    // جلب الموديل الحالي
+    $module = Module::findOrFail($id);
+
+    // تحديث بيانات الموديل
+    $module->update([
+        "ar_name" => $request->ar_name,
+        "en_name" => $request->en_name,
+        "make_by" => $request->brand_id
+    ]);
+
+    // تحديث ModuleDate المرتبطة أو إنشاء واحدة جديدة إذا لم تكن موجودة
+    $moduleDate = ModuleDate::firstOrNew(['module_by' => $module->id]);
+    $moduleDate->date_form = $request->date_from;
+    $moduleDate->date_to = $request->date_to;
+    $moduleDate->save();
+
+    return response()->json(['message' => 'Module updated successfully'], 200);
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(module $module)
+    public function destroy(module $module, $id)
     {
-        //
+        $module = module::findOrFail($id);
+        $module->delete();
+        return response()->json(['message' => 'Module deleted successfully'], 200);
     }
 }

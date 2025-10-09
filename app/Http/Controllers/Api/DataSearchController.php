@@ -12,11 +12,11 @@ class DataSearchController extends Controller
 {
     public function index(){
 
-        return [
+        return response()->json([
             "brands" => Brands::all(),
             "module" => module::all(),
             "ModuleDate" => ModuleDate::all(),
             "enginees" => Enginee::all(),
-        ];
+        ]);
     }
 }

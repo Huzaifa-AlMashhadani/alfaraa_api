@@ -70,7 +70,7 @@ public function index(Request $request)
     $order = Order::create([
         "user_id" => $user_id,
         "name" => $request->name,
-        "country" => $request->country,
+        "country" => $request->country ,
         "email" => $request->email,
         "city" => $request->city,
         "orderNotes" => $request->orderNotes, // اختياري
@@ -101,9 +101,32 @@ public function index(Request $request)
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+    'name' => 'required|string',
+    'email' => 'required|email',
+    'phone' => 'required|string',
+    'country' => 'required|string',
+    'city' => 'required|string',
+    'streetAddress' => 'required|string',
+    'totlePrice' => 'required|numeric',
+]);
+
+        $order = Order::create([
+        "user_id" => $request->user_id ?? 1,
+        "name" => $request->name,
+        "country" => $request->country ,
+        "email" => $request->email,
+        "city" => $request->city,
+        "orderNotes" => $request->orderNotes, // اختياري
+        "phone" => $request->phone,
+        "status" => $request->status ?? "قيد التنفيذ",
+        "streetAddress" => $request->streetAddress,
+        "totlePrice" => $request->totlePrice
+        ]);
+
+        return response()->json(["message" => "تم حفظ الطلب بنجاح", "order_id" => $order->id], 200);
     }
 
     /**
@@ -117,9 +140,16 @@ public function index(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+
+    public function show(Order $order, $id)
     {
-        //
+        $order = Order::with("orderItem")->findOrFail($id);
+        return response()->json($order, 200);
+        
+    }
+    public function allOrders()
+    {
+        return Order::with("orderItem")->orderBy("created_at", "desc")->take(100)->get();
     }
 
     /**
@@ -133,16 +163,35 @@ public function index(Request $request)
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(Request $request, Order $order, $id)
     {
         //
+
+        $order = Order::findOrFail($id);
+
+        $order->update([
+        "user_id" => $request->user_id ?? 1,
+        "name" => $request->name,
+        "country" => $request->country ,
+        "email" => $request->email,
+        "city" => $request->city,
+        "orderNotes" => $request->orderNotes, // اختياري
+        "phone" => $request->phone,
+        "status" => $request->status ?? "قيد التنفيذ",
+        "streetAddress" => $request->streetAddress,
+        "totlePrice" => $request->totlePrice
+        ]);
+
+        return response()->json(["message" => "تم تحديث الطلب بنجاح", "order_id" => $order->id], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function destroy(Order $order, $id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return response()->json(["message" => "تم حذف الطلب بنجاح", "order_id" => $order->id], 200);
     }
 }

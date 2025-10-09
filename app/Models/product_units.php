@@ -9,6 +9,12 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 class product_units extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "product_id",
+        "unit_id",
+        "stock",
+        "price"
+    ];
 
     public function products(){
         return $this->belongsTo(ProductDetail::class);

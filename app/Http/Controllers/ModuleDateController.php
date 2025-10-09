@@ -14,6 +14,8 @@ class ModuleDateController extends Controller
     public function index()
     {
         //
+
+        return ModuleDate::all();
     }
 
     /**

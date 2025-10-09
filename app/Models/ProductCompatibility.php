@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class ProductCompatibility extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+             "product_detail_id",
+            "brand_id",
+            "model_id" ,
+            "model_date_id" ,
+            "engine_id",
+    ];
+    
      public function brands(){
         return $this->hasMany(brands::class);
     }

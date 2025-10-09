@@ -9,6 +9,12 @@ class Alternative_parts extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "product_id",
+        "company",
+        "part_number"
+    ];
+
     public function porduct(){
         return $this->belongsTo(ProductDetail::class);
     }

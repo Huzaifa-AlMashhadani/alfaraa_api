@@ -19,6 +19,7 @@ class Order extends Model
         "phone",
         "streetAddress",
         "cart",
+        'status',
         "totlePrice"
     ];
 

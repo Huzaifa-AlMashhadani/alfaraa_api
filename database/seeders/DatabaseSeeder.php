@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Enginee;
 use App\Models\module;
 use App\Models\ModuleDate;
+use App\Models\Order;
 use App\Models\Product_images;
 use App\Models\product_units;
 use App\Models\ProductCompatibility;
@@ -23,12 +24,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->count(100)->create();
-        Store::factory()->count(20)->create();
-        unit::factory()->count(20)
+        User::factory()->count(20)->create();
+        Store::factory()->count(10)->create();
+        unit::factory()->count(10)
             ->create();
         Categories::factory()
-            ->count(10)
+            ->count(5)
             ->create()
             ->each(function($category){
                 ProductDetail::factory()
@@ -68,22 +69,20 @@ class DatabaseSeeder extends Seeder
                     ->each(function(){
                         Enginee::factory()
                         ->count(2)
-                        ->create()
-                        ->each(function(){
-                            ProductCompatibility::factory()->count(3)->create();
-                        });
+                        ->create();
+                        // ->each(function(){
+                        //     ProductCompatibility::factory()->count(100)->create();
+                        // });
                     })
                     ->each(function(){
                         Alternative_parts::factory()
                         ->count(2)
-                        ->create()
-                        ->each(function(){
-                            ProductCompatibility::factory()->count(3)->create();
-                        });
+                        ->create();
+                        
                     });
                 });
             });
-
+            Order::factory()->count(100)->create();
             Advertisements::factory()->count(10)->create();
             Articles::factory()->count(10)->create();
             

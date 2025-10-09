@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string("country");
             $table->string("email");
             $table->string("city");
-            $table->string("orderNotes")->nullable();
+            $table->string("status")->default("قيد التنفيذ");
+            $table->text("orderNotes")->nullable();
             $table->string("phone");
             $table->string("streetAddress");
             $table->string("totlePrice");

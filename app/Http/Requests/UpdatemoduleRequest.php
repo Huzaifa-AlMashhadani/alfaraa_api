@@ -11,7 +11,7 @@ class UpdatemoduleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdatemoduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "ar_name" => "required|string|max:255",
+            "en_name" => "required|string|max:255",
+            "make_by" => "required|exists:brands,id",
+            "date_from" => "required|date",
+            "date_to" => "required|date|after_or_equal:date_from"
+            
         ];
     }
 }

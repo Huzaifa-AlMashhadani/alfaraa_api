@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Categories extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "name",
+        "description",
+        "ad_imae_url"
+    ];
+
     public function products(){
         return $this->hasMany(ProductDetail::class, "categories_id");
     }

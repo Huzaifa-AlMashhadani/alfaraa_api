@@ -4,13 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 
 class ProductDetail extends Model
 {
     use HasFactory;
 
     protected $table = 'product_details'; // تأكد من هذا الاسم
+
+    protected $fillable = [
+        "ar_name",
+        "en_name",
+        "ar_description",
+        "en_description",
+        "price",
+        "old_price",
+        "store_id",
+        "thumbnail",
+        "categories_id",
+    ];
 
     public function product (){
         return $this->hasMany(ProductCompatibility::class);
@@ -24,9 +35,6 @@ class ProductDetail extends Model
     public function productUnits(){
         return $this->hasMany(product_units::class, "product_id");
     }
-    // public function reviees(){
-    //     return $this->hasMany(Review::class, "product_id");
-    // }
     public function reviews(){
         return $this->hasMany(Review::class, "product_id");
     }

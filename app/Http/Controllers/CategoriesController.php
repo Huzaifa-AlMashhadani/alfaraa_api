@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCategoriesRequest;
 use App\Models\Categories;
 use App\Models\ProductDetail;
 use Database\Seeders\ProductDetailSeeder;
+use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
@@ -36,9 +37,21 @@ class CategoriesController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $categorie = Categories::create([
+            "name" => $request->name,
+            "description" => $request->description,
+            "ad_imae_url" => ""
+        ]);
+        if ($request->hasFile("ad_image")) {
+            $path = $request->file("ad_image")->store("categories_images", "public");
+            $fullUrl = asset("storage/" . $path);
+            $categorie->ad_imae_url = $fullUrl;
+            $categorie->save();
+        }
+
+        return response()->json(['message' => 'categorie created successfully', 'categorie' => $categorie], 201);
     }
 
     /**
@@ -68,16 +81,34 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoriesRequest $request, Categories $categories)
+    public function update(Request $request, Categories $categories, $id)
     {
         //
+        $categorie = Categories::findOrFail($id);
+
+        $categorie->update([
+            "name" => $request->name,
+            "description" => $request->description,
+            "ad_imae_url" => ""
+        ]);
+        if ($request->hasFile("ad_image")) {
+            $path = $request->file("ad_image")->store("categories_images", "public");
+            $fullUrl = asset("storage/" . $path);
+            $categorie->ad_imae_url = $fullUrl;
+            $categorie->save();
+        }
+        return response()->json(['message' => 'categorie updated successfully', 'categorie' => $categorie], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categories $categories)
+    public function destroy(Categories $categories, $id)
     {
-        //
+        $categorie = Categories::findOrFail($id);
+
+        $categorie->delete();
+
+        return response(["message" => "deleted !"], 200);
     }
 }
