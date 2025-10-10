@@ -15,6 +15,10 @@ class ConversationController extends Controller
     public function index()
     {
         //
+
+        return Conversation::orderBy('created_at', 'desc')
+            ->with(['user:id,name,avatar_url', 'agent:id,name,avatar_url'])
+            ->get();
     }
 
     /**
@@ -41,9 +45,11 @@ class ConversationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Conversation $conversation)
+    public function show($id)
     {
-        //
+        return Conversation::where('id', $id)
+            ->with(['user:id,name,avatar_url,role', 'agent:id,name,avatar_url', 'messages.sender:id,name,avatar_url,role'])
+            ->first();
     }
 
     /**

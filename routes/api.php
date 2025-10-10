@@ -60,7 +60,7 @@ Route::get("/messages", [MessageController::class, "index"]);
 Route::post("/createTiket", [ConversationController::class, "store"]);
 
 // create a new message
-Route::post("/createMessage", [MessageController::class, "store"]);
+Route::post("/createMessage", [MessageController::class, "addMessage"]);
 
 });
 
@@ -304,5 +304,14 @@ Route::post("/editArticle/{id}", [ArticlesController::class, "update"]);
 
 // delete a Article
 Route::delete("/deleteArticle/{id}", [ArticlesController::class, "destroy"]);
+
+// get all tikets
+Route::get("/allTikets", [ConversationController::class, "index"]);
+
+// get  tiket by id
+Route::get("/conversation/{id}", [ConversationController::class, "show"]);
+
+// support chat add message
+Route::post("/support/addMessage", [MessageController::class, "supportAddMessage"]);
 
 });
